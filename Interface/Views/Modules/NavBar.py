@@ -1,6 +1,6 @@
 from flet import *
 
-class NavBar(UserControl):
+class SideBar(UserControl):
     def __init__(self):
         super().__init__()
 
@@ -11,14 +11,14 @@ class NavBar(UserControl):
                 controls=[
                     Container(
                         on_click= lambda _: self.page.go("/login"),
-                        width=85,
-                        height=85,
+                        width=115,
+                        height=115,
                         bgcolor='#333A40',
                         alignment=alignment.center,
-                        border_radius=42,
+                        border_radius=80,
                         content=Text(
                             value=initials,
-                            size=30,
+                            size=35,
                             weight="Medium",
                             font_family="Poppins"
                         )
@@ -53,14 +53,14 @@ class NavBar(UserControl):
     def build(self):
         return Container(
             width=200,
-            height=780,
-            padding=padding.only(top=20),
+            height=982,
+            padding=padding.only(top=10),
             alignment=alignment.center,
             content=Column(
                 horizontal_alignment=CrossAxisAlignment.CENTER,
                 controls=[
                     self.UserData("GA"),
-                    Divider(height=50, color='transparent'),
+                    Divider(height=100, color='transparent'),
                     self.PageIcons(icons.SEARCH),
                     self.PageIcons(icons.DASHBOARD),
                     Divider(height=50, color='transparent'),
@@ -69,4 +69,3 @@ class NavBar(UserControl):
             )
             
         )
-    
