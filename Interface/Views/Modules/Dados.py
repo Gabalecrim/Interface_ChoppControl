@@ -6,11 +6,7 @@ class Dados(UserControl):
         super().__init__()
 
     def build(self):
-        self.vertical_alignment = "center"
-        self.horizontal_alignment = "center"
-        self.bgcolor = "#333A40"
-        self.title = "Chopp Control"
-
+        
         Velocidade = "50"
         Densidade = "1,08"
         Peso = "5,4"
@@ -29,11 +25,11 @@ class Dados(UserControl):
                             Container(
                                 padding=padding.only(top=15, left=20),
                                 content=Row(
-                                    vertical_alignment=CrossAxisAlignment,
+                                    vertical_alignment=CrossAxisAlignment.CENTER,
                                     spacing=5,
                                     controls=(
                                         Image(
-                                            src=f"test\Interface\Images\mdi_car-cruise-control.png",
+                                            src=f"Interface\Assets\Velocidade.png",
                                             width=50,
                                             height=50,
                                             fit=ImageFit.CONTAIN,
@@ -83,11 +79,11 @@ class Dados(UserControl):
                             Container(
                                 padding=padding.only(top=15, left=28),
                                 content=Row(
-                                    vertical_alignment=CrossAxisAlignment,
+                                    vertical_alignment=CrossAxisAlignment.CENTER,
                                     spacing=10,
                                     controls=(
                                         Image(
-                                            src=f"test\Interface\Images\mdi_car-cruise-control (1).png",
+                                            src=f"Interface\Assets\Densidade.png",
                                             width=40,
                                             height=42,
                                             fit=ImageFit.CONTAIN,
@@ -137,11 +133,11 @@ class Dados(UserControl):
                             Container(
                                 padding=padding.only(top=25, left=35),
                                 content=Row(
-                                    vertical_alignment=CrossAxisAlignment,
+                                    vertical_alignment=CrossAxisAlignment.CENTER,
                                     spacing=15,
                                     controls=(
                                         Image(
-                                            src=f"test\Interface\Images\Vector.png",
+                                            src=f"Interface\Assets\Peso.png",
                                             width=30,
                                             height=30,
                                             fit=ImageFit.CONTAIN,

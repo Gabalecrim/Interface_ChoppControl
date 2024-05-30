@@ -20,30 +20,32 @@ def Home(page: ft.Page):
         bgcolor="#333A40",
         border_radius=ft.border_radius.only(top_left=30, bottom_left=30),
         alignment=ft.alignment.center,
+        padding=ft.padding.all(10),
         content=ft.Column(
             controls=[
-                ft.Row(
-                    controls=[
-                        ft.Image(
-                            src=f"Interface\Assets\Big_Logo.png",
-                            width=350,
-                            fit=ft.ImageFit.CONTAIN,
-                        ),
-                        ft.Container(
-                            width=90,
-                            height=90,
-                            border_radius=80,
-                            bgcolor=("#192226"),
-                        ),
-                        ft.Container(
-                            width=170,
-                            height=90,
-                            border_radius=80,
-                            bgcolor=("#192226"),
-                        ),
-                    ],
+                # Header
+                ft.Container(
+                    padding=ft.padding.only(top=10, left=50), content=Modules.Header()
                 ),
-                ft.Row(controls=[]),
+                # main page
+                ft.Container(
+                    width=1200,
+                    height=800,
+                    padding=ft.padding.only(top=10, left=100),
+                    content=ft.Row(
+                        spacing=50,
+                        controls=[
+                            ft.Container(
+                                width=500,
+                                height=700,
+                                bgcolor=("#192226"),
+                            ),
+                            ft.Container(
+                                width=500, height=400, content=Modules.Dados()
+                            ),
+                        ],
+                    ),
+                ),
             ]
         ),
     )
