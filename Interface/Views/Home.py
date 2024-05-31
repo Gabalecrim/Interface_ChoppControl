@@ -27,21 +27,29 @@ def Home(page: ft.Page):
                 ft.Container(
                     padding=ft.padding.only(top=10, left=50), content=Modules.Header()
                 ),
-                # main page
+                # Status
                 ft.Container(
                     width=1200,
                     height=800,
                     padding=ft.padding.only(top=10, left=100),
                     content=ft.Row(
-                        spacing=50,
+                        spacing=100,
                         controls=[
+
+                            #Space
                             ft.Container(
-                                width=500,
-                                height=700,
-                                bgcolor=("#192226"),
+                                width=200,
                             ),
+                            #Status
                             ft.Container(
-                                width=500, height=400, content=Modules.Dados()
+                                width=450,
+                                height=700,
+                                padding=ft.padding.only(top=20),
+                                content=Modules.Status()
+                            ),
+                            #Dados
+                            ft.Container(
+                                width=500, height=400,padding=ft.padding.only(top=-50), content=Modules.Dados()
                             ),
                         ],
                     ),

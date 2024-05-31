@@ -43,7 +43,7 @@ class NavBar(UserControl):
                         on_click=lambda _: self.page.go("/login"),
                         icon=icon_name,
                         icon_size=70,
-                        icon_color=("#ffffff"),
+                        icon_color=("#FFAF36"),
                         style=ButtonStyle(
                             color={MaterialState.HOVERED: colors.GREEN},
                         ),
