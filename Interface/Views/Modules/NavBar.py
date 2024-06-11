@@ -2,8 +2,6 @@ from flet import *
 
 
 class NavBar(UserControl):
-    def __init__(self):
-        super().__init__()
 
     def UserData(self, initials: str):
         return Container(
