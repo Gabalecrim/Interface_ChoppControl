@@ -1,19 +1,24 @@
 import flet as ft
-from flet_route import *
-from Views import Home
-from Views import Login
-from Views import Page1
+from flet_route import Routing, path
+from Views.Home import Home
+from Views.Login import Login
 
 
 def main(page: ft.Page):
-
+    page.bgcolor = "#FFFFFF"
     app_routes = [
-        path(url="/", clear=True, view=Home),
-        path(url="/login", clear=True, view=Login),
-        path(url="/page1", clear=True, view=Page1),
+        path(
+            url="/",
+            clear=True,
+            view=Home,
+        ),
+        path(url="/next_view/:my_id", clear=False, view=Login),
     ]
 
-    Routing(page=page, app_routes=app_routes)
+    Routing(
+        page=page,
+        app_routes=app_routes,
+    )
     page.go(page.route)
 
 
