@@ -6,13 +6,13 @@ def Login(page: ft.Page, params: Params, basket: Basket):
 
     return ft.View(
         "/next_view/:my_id",
+        bgcolor="#192026",
         controls=[
             ft.Container(
-                width=1512,
-                height=982,
-                bgcolor="#192026",
+                alignment=ft.alignment.center,
                 content=ft.Column(
-                    [
+                    alignment=ft.MainAxisAlignment.CENTER,
+                    controls=[
                         ft.Container(
                             ft.Image(
                                 src=f"Interface\Assets\Big_Logo.png",
@@ -83,12 +83,16 @@ def Login(page: ft.Page, params: Params, basket: Basket):
                                             padding=ft.padding.only(top=20, bottom=12),
                                         ),
                                         ft.Container(
-                                            ft.CupertinoFilledButton(
+                                            ft.CupertinoButton(
                                                 content=ft.Text(
                                                     "Login",
                                                     font_family="Pippins",
-                                                    weight="W_100",
+                                                    weight="Bold",
+                                                    color=("#ffffff"),
                                                 ),
+                                                width=202,
+                                                # high=70,
+                                                bgcolor="#FFAF36",
                                                 opacity_on_click=0.3,
                                                 on_click=lambda _: page.go("/"),
                                             ),
