@@ -31,9 +31,14 @@ def Login(page: ft.Page, params: Params, basket: Basket):
                             height=540,
                             border_radius=10,
                             content=ft.Container(
-                                alignment=ft.alignment.center,
+                                # alignment=ft.alignment.center,
+                                # bgcolor="#ffffff",
+                                width=304,
+                                height=345,
                                 content=ft.Column(
-                                    [
+                                    alignment=ft.MainAxisAlignment.CENTER,
+                                    horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+                                    controls=[
                                         ft.Container(
                                             padding=ft.padding.only(
                                                 top=40,
@@ -77,7 +82,8 @@ def Login(page: ft.Page, params: Params, basket: Basket):
                                             ]
                                         ),
                                         ft.Container(
-                                            ft.Checkbox(
+                                            alignment=ft.alignment.center,
+                                            content=ft.CupertinoCheckbox(
                                                 label="Remember me", value=False
                                             ),
                                             padding=ft.padding.only(top=20, bottom=12),
@@ -102,7 +108,6 @@ def Login(page: ft.Page, params: Params, basket: Basket):
                                             ),
                                         ),
                                     ],
-                                    horizontal_alignment="center",
                                 ),
                             ),
                         ),
