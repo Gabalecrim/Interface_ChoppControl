@@ -35,6 +35,7 @@ def Configs(page: ft.Page, params: Params, basket: Basket):
         def PageIcons(
             self,
             icon_name: str,
+            Color: str,
         ):
             return Container(
                 width=90,
@@ -47,7 +48,7 @@ def Configs(page: ft.Page, params: Params, basket: Basket):
                             on_click=lambda _: self.page.go("/"),
                             icon=icon_name,
                             icon_size=70,
-                            icon_color=("#FFAF36"),
+                            icon_color=Color,
                             style=ButtonStyle(
                                 color={MaterialState.HOVERED: colors.GREEN},
                             ),
@@ -67,9 +68,9 @@ def Configs(page: ft.Page, params: Params, basket: Basket):
                     controls=[
                         self.UserData("GA"),
                         Divider(height=100, color="transparent"),
-                        self.PageIcons(icons.DASHBOARD),
+                        self.PageIcons(icons.DASHBOARD, ("#ffffff")),
                         Divider(height=50, color="transparent"),
-                        self.PageIcons(icons.SETTINGS),
+                        self.PageIcons(icons.SETTINGS, ("#FFAF36")),
                     ],
                 ),
             )
@@ -125,10 +126,7 @@ def Configs(page: ft.Page, params: Params, basket: Basket):
                                                 color=("#FFAF36"),
                                                 # bgcolor=("Transparent"),
                                             ),
-                                            icon=ft.Icon(
-                                                name=ft.icons.NOTIFICATIONS_OUTLINED,
-                                                color=("#FFAF36"),
-                                            ),
+                                            icon=ft.icons.NOTIFICATIONS_OUTLINED,
                                         ),
                                     ),
                                     ft.Container(
@@ -201,32 +199,6 @@ def Configs(page: ft.Page, params: Params, basket: Basket):
 
     # Header
     # ----------------------------------------------------------------
-    class Inputs(ft.UserControl):
-        def build(self):
-            return ft.Container(
-                alignment=ft.alignment.top_center,
-                content=ft.Column(
-                    controls=[
-                        ft.SegmentedButton(
-                            selected={1},
-                            segments=[
-                                ft.Segment(
-                                    value="1",
-                                    label=ft.Text("Fluxo"),
-                                    icon=ft.Icon(ft.icons.LOOKS_ONE),
-                                ),
-                                ft.Segment(
-                                    value="2",
-                                    label=ft.Text("Processo"),
-                                    icon=ft.Icon(ft.icons.LOOKS_ONE),
-                                ),
-                            ],
-                        )
-                    ]
-                ),
-            )
-
-    # ----------------------------------------------------------------
     # Main page
     Process = ft.Container(
         bgcolor="#333A40",
@@ -261,7 +233,182 @@ def Configs(page: ft.Page, params: Params, basket: Basket):
                                 height=700,
                                 col=6,
                                 padding=ft.padding.only(top=20, right=10),
-                                content=Inputs(),
+                                content=ft.Container(
+                                    content=ft.Column(
+                                        controls=(
+                                            [
+                                                ft.Row(
+                                                    alignment=ft.MainAxisAlignment.CENTER,
+                                                    controls=[
+                                                        ft.TextField(
+                                                            label="Setpoint de fluxo",
+                                                            bgcolor="#192026",
+                                                            border_radius=10,
+                                                            border_width=2,
+                                                            border_color="#192026",
+                                                            prefix_icon=ft.icons.PERSON,
+                                                        ),
+                                                        ft.CupertinoButton(
+                                                            content=ft.Text(
+                                                                "Set",
+                                                                font_family="Pippins",
+                                                                weight="Bold",
+                                                                color=("#ffffff"),
+                                                            ),
+                                                            bgcolor="#FFAF36",
+                                                            opacity_on_click=0.3,
+                                                            # on_click=
+                                                        ),
+                                                    ],
+                                                ),
+                                                ft.Row(
+                                                    alignment=ft.MainAxisAlignment.CENTER,
+                                                    controls=[
+                                                        ft.TextField(
+                                                            label="Velocidade do servo",
+                                                            bgcolor="#192026",
+                                                            border_radius=10,
+                                                            border_width=2,
+                                                            border_color="#192026",
+                                                            prefix_icon=ft.icons.PERSON,
+                                                        ),
+                                                        ft.CupertinoButton(
+                                                            content=ft.Text(
+                                                                "Set",
+                                                                font_family="Pippins",
+                                                                weight="Bold",
+                                                                color=("#ffffff"),
+                                                            ),
+                                                            bgcolor="#FFAF36",
+                                                            opacity_on_click=0.3,
+                                                            # on_click=
+                                                        ),
+                                                    ],
+                                                ),
+                                                ft.Row(
+                                                    alignment=ft.MainAxisAlignment.CENTER,
+                                                    controls=[
+                                                        ft.TextField(
+                                                            label="velocidade do servo fim de envase",
+                                                            bgcolor="#192026",
+                                                            border_radius=10,
+                                                            border_width=2,
+                                                            border_color="#192026",
+                                                            prefix_icon=ft.icons.PERSON,
+                                                        ),
+                                                        ft.CupertinoButton(
+                                                            content=ft.Text(
+                                                                "Set",
+                                                                font_family="Pippins",
+                                                                weight="Bold",
+                                                                color=("#ffffff"),
+                                                            ),
+                                                            bgcolor="#FFAF36",
+                                                            opacity_on_click=0.3,
+                                                            # on_click=
+                                                        ),
+                                                    ],
+                                                ),
+                                                ft.Row(
+                                                    alignment=ft.MainAxisAlignment.CENTER,
+                                                    controls=[
+                                                        ft.TextField(
+                                                            label="Set scale",
+                                                            bgcolor="#192026",
+                                                            border_radius=10,
+                                                            border_width=2,
+                                                            border_color="#192026",
+                                                            prefix_icon=ft.icons.PERSON,
+                                                        ),
+                                                        ft.CupertinoButton(
+                                                            content=ft.Text(
+                                                                "Set",
+                                                                font_family="Pippins",
+                                                                weight="Bold",
+                                                                color=("#ffffff"),
+                                                            ),
+                                                            bgcolor="#FFAF36",
+                                                            opacity_on_click=0.3,
+                                                            # on_click=
+                                                        ),
+                                                    ],
+                                                ),
+                                                ft.Row(
+                                                    alignment=ft.MainAxisAlignment.CENTER,
+                                                    controls=[
+                                                        ft.TextField(
+                                                            label="Densidade",
+                                                            bgcolor="#192026",
+                                                            border_radius=10,
+                                                            border_width=2,
+                                                            border_color="#192026",
+                                                            prefix_icon=ft.icons.PERSON,
+                                                        ),
+                                                        ft.CupertinoButton(
+                                                            content=ft.Text(
+                                                                "Set",
+                                                                font_family="Pippins",
+                                                                weight="Bold",
+                                                                color=("#ffffff"),
+                                                            ),
+                                                            bgcolor="#FFAF36",
+                                                            opacity_on_click=0.3,
+                                                            # on_click=
+                                                        ),
+                                                    ],
+                                                ),
+                                                ft.Row(
+                                                    alignment=ft.MainAxisAlignment.CENTER,
+                                                    controls=[
+                                                        ft.TextField(
+                                                            label="Setpoint de volume",
+                                                            bgcolor="#192026",
+                                                            border_radius=10,
+                                                            border_width=2,
+                                                            border_color="#192026",
+                                                            prefix_icon=ft.icons.PERSON,
+                                                        ),
+                                                        ft.CupertinoButton(
+                                                            content=ft.Text(
+                                                                "Set",
+                                                                font_family="Pippins",
+                                                                weight="Bold",
+                                                                color=("#ffffff"),
+                                                            ),
+                                                            bgcolor="#FFAF36",
+                                                            opacity_on_click=0.3,
+                                                            # on_click=
+                                                        ),
+                                                    ],
+                                                ),
+                                                ft.Row(
+                                                    alignment=ft.MainAxisAlignment.CENTER,
+                                                    controls=[
+                                                        ft.TextField(
+                                                            label="Integral PIGid",
+                                                            bgcolor="#192026",
+                                                            border_radius=10,
+                                                            border_width=2,
+                                                            border_color="#192026",
+                                                            prefix_icon=ft.icons.PERSON,
+                                                        ),
+                                                        ft.CupertinoButton(
+                                                            content=ft.Text(
+                                                                "Set",
+                                                                font_family="Pippins",
+                                                                weight="Bold",
+                                                                color=("#ffffff"),
+                                                            ),
+                                                            bgcolor="#FFAF36",
+                                                            opacity_on_click=0.3,
+                                                            # on_click=
+                                                        ),
+                                                    ],
+                                                ),
+                                            ]
+                                        )
+                                    ),
+                                ),
                             ),
                             # Dados
                             ft.Container(

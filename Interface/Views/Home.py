@@ -1,6 +1,8 @@
 import flet as ft
 from flet import *
 from flet_route import *
+import time
+import asyncio
 import threading
 
 
@@ -34,6 +36,7 @@ def Home(page: ft.Page, params: Params, basket: Basket):
         def PageIcons(
             self,
             icon_name: str,
+            Color: str,
         ):
             return Container(
                 width=90,
@@ -46,7 +49,7 @@ def Home(page: ft.Page, params: Params, basket: Basket):
                             on_click=lambda _: self.page.go("/configs"),
                             icon=icon_name,
                             icon_size=70,
-                            icon_color=("#FFAF36"),
+                            icon_color=Color,
                             style=ButtonStyle(
                                 color={MaterialState.HOVERED: colors.GREEN},
                             ),
@@ -66,9 +69,9 @@ def Home(page: ft.Page, params: Params, basket: Basket):
                     controls=[
                         self.UserData("GA"),
                         Divider(height=100, color="transparent"),
-                        self.PageIcons(icons.DASHBOARD),
+                        self.PageIcons(icons.DASHBOARD, ("#FFAF36")),
                         Divider(height=50, color="transparent"),
-                        self.PageIcons(icons.SETTINGS),
+                        self.PageIcons(icons.SETTINGS, ("#ffffff")),
                     ],
                 ),
             )
@@ -139,6 +142,7 @@ def Home(page: ft.Page, params: Params, basket: Basket):
                                             controls=[
                                                 ft.IconButton(
                                                     icon=ft.icons.BUILD,
+                                                    icon_color=("#FFAF36"),
                                                     on_click=lambda _: self.page.go(
                                                         "/configs"
                                                     ),
@@ -185,14 +189,35 @@ def Home(page: ft.Page, params: Params, basket: Basket):
                 ),
             )
 
-    # Header
-    # ----------------------------------------------------------------
-    # Status
+        # Header
+        # ----------------------------------------------------------------
+        # Status
+
     class Status(ft.UserControl):
 
         def build(self):
+
+            class Setpoint(ft.Text):
+                def __init__(self, seconds):
+                    super().__init__()
+                    self.seconds = seconds
+
+                def did_mount(self):
+                    self.running = True
+                    self.page.run_task(self.update_timer)
+
+                def will_unmount(self):
+                    self.running = False
+
+                async def update_timer(self):
+                    while self.seconds and self.running:
+                        self.size = 25
+                        self.value = self.seconds
+                        self.update()
+                        await asyncio.sleep(1)
+                        self.seconds += 1
+
             Barril = 0
-            enchimento = 200
 
             def Start(e):
 
@@ -258,10 +283,43 @@ def Home(page: ft.Page, params: Params, basket: Basket):
                 controls=[
                     ft.Container(
                         content=ft.Container(
-                            height=100,
-                            width=200,
-                            border_radius=20,
-                            bgcolor=("#192226"),
+                            bgcolor="#192226",
+                            width=238,
+                            height=130,
+                            border_radius=10,
+                            content=Column(
+                                [
+                                    Container(
+                                        padding=padding.only(top=15),
+                                        content=Container(
+                                            alignment=ft.alignment.center,
+                                            content=Text(
+                                                "Set point",
+                                                font_family="Poppins",
+                                                color=("#51BFF5"),
+                                                size=22,
+                                            ),
+                                        ),
+                                    ),
+                                    Container(
+                                        content=Row(
+                                            vertical_alignment=CrossAxisAlignment.END,
+                                            alignment=ft.MainAxisAlignment.CENTER,
+                                            spacing=20,
+                                            controls=(
+                                                Setpoint(150),
+                                                Text(
+                                                    "ml",
+                                                    font_family="Poppins",
+                                                    color=("#8c9092"),
+                                                    size=20,
+                                                ),
+                                            ),
+                                        ),
+                                    ),
+                                ],
+                                horizontal_alignment="center",
+                            ),
                         ),
                         alignment=ft.alignment.center,
                     ),
@@ -276,7 +334,7 @@ def Home(page: ft.Page, params: Params, basket: Basket):
                                     alignment=ft.alignment.bottom_center,
                                     content=ft.Container(
                                         width=264,
-                                        height=enchimento,
+                                        height=200,
                                         bgcolor=("#FFAF36"),
                                     ),
                                 ),
