@@ -1,6 +1,9 @@
 import flet as ft
 from flet import *
 from flet_route import *
+import time
+import asyncio
+import threading
 
 
 def Home(page: ft.Page, params: Params, basket: Basket):
@@ -33,6 +36,7 @@ def Home(page: ft.Page, params: Params, basket: Basket):
         def PageIcons(
             self,
             icon_name: str,
+            Color: str,
         ):
             return Container(
                 width=90,
@@ -42,10 +46,10 @@ def Home(page: ft.Page, params: Params, basket: Basket):
                     vertical_alignment=CrossAxisAlignment.CENTER,
                     controls=[
                         IconButton(
-                            on_click=lambda _: self.page.go("/login"),
+                            on_click=lambda _: self.page.go("/configs"),
                             icon=icon_name,
                             icon_size=70,
-                            icon_color=("#FFAF36"),
+                            icon_color=Color,
                             style=ButtonStyle(
                                 color={MaterialState.HOVERED: colors.GREEN},
                             ),
@@ -65,10 +69,9 @@ def Home(page: ft.Page, params: Params, basket: Basket):
                     controls=[
                         self.UserData("GA"),
                         Divider(height=100, color="transparent"),
-                        self.PageIcons(icons.SEARCH),
-                        self.PageIcons(icons.DASHBOARD),
+                        self.PageIcons(icons.DASHBOARD, ("#FFAF36")),
                         Divider(height=50, color="transparent"),
-                        self.PageIcons(icons.SETTINGS),
+                        self.PageIcons(icons.SETTINGS, ("#ffffff")),
                     ],
                 ),
             )
@@ -89,6 +92,7 @@ def Home(page: ft.Page, params: Params, basket: Basket):
     class Header(ft.UserControl):
 
         def build(self):
+
             return ft.Container(
                 alignment=ft.alignment.center_right,
                 content=ft.ResponsiveRow(
@@ -119,10 +123,12 @@ def Home(page: ft.Page, params: Params, basket: Basket):
                                         # border_radius=80,
                                         radius=45,
                                         bgcolor=("#192226"),
-                                        content=ft.PopupMenuButton(
+                                        content=ft.IconButton(
+                                            style=ft.ButtonStyle(
+                                                color=("#FFAF36"),
+                                                # bgcolor=("Transparent"),
+                                            ),
                                             icon=ft.icons.NOTIFICATIONS_OUTLINED,
-                                            icon_color=("#FFAF36"),
-                                            icon_size=30,
                                         ),
                                     ),
                                     ft.Container(
@@ -134,37 +140,12 @@ def Home(page: ft.Page, params: Params, basket: Basket):
                                         content=ft.Row(
                                             spacing=40,
                                             controls=[
-                                                ft.PopupMenuButton(
+                                                ft.IconButton(
                                                     icon=ft.icons.BUILD,
                                                     icon_color=("#FFAF36"),
-                                                    icon_size=30,
-                                                    items=[
-                                                        ft.PopupMenuItem(text="Item 1"),
-                                                        ft.PopupMenuItem(
-                                                            icon=ft.icons.POWER_INPUT,
-                                                            text="Check power",
-                                                        ),
-                                                        ft.PopupMenuItem(
-                                                            content=ft.ResponsiveRow(
-                                                                [
-                                                                    ft.Icon(
-                                                                        ft.icons.HOURGLASS_TOP_OUTLINED
-                                                                    ),
-                                                                    ft.Text(
-                                                                        "Item with a custom content"
-                                                                    ),
-                                                                ]
-                                                            ),
-                                                            on_click=lambda _: print(
-                                                                "Button with a custom content clicked!"
-                                                            ),
-                                                        ),
-                                                        ft.PopupMenuItem(),  # divider
-                                                        ft.PopupMenuItem(
-                                                            text="Checked item",
-                                                            checked=False,  # on_click=check_item_clicked
-                                                        ),
-                                                    ],
+                                                    on_click=lambda _: self.page.go(
+                                                        "/configs"
+                                                    ),
                                                 ),
                                                 ft.PopupMenuButton(
                                                     icon_color=("#FFAF36"),
@@ -208,12 +189,34 @@ def Home(page: ft.Page, params: Params, basket: Basket):
                 ),
             )
 
-    # Header
-    # ----------------------------------------------------------------
-    # Status
+        # Header
+        # ----------------------------------------------------------------
+        # Status
+
     class Status(ft.UserControl):
 
         def build(self):
+
+            class Setpoint(ft.Text):
+                def __init__(self, seconds):
+                    super().__init__()
+                    self.seconds = seconds
+
+                def did_mount(self):
+                    self.running = True
+                    self.page.run_task(self.update_timer)
+
+                def will_unmount(self):
+                    self.running = False
+
+                async def update_timer(self):
+                    while self.seconds and self.running:
+                        self.size = 25
+                        self.value = self.seconds
+                        self.update()
+                        await asyncio.sleep(1)
+                        self.seconds += 1
+
             Barril = 0
 
             def Start(e):
@@ -280,19 +283,81 @@ def Home(page: ft.Page, params: Params, basket: Basket):
                 controls=[
                     ft.Container(
                         content=ft.Container(
-                            height=100,
-                            width=200,
-                            border_radius=20,
-                            bgcolor=("#192226"),
+                            bgcolor="#192226",
+                            width=238,
+                            height=130,
+                            border_radius=10,
+                            content=Column(
+                                [
+                                    Container(
+                                        padding=padding.only(top=15),
+                                        content=Container(
+                                            alignment=ft.alignment.center,
+                                            content=Text(
+                                                "Set point",
+                                                font_family="Poppins",
+                                                color=("#51BFF5"),
+                                                size=22,
+                                            ),
+                                        ),
+                                    ),
+                                    Container(
+                                        content=Row(
+                                            vertical_alignment=CrossAxisAlignment.END,
+                                            alignment=ft.MainAxisAlignment.CENTER,
+                                            spacing=20,
+                                            controls=(
+                                                Setpoint(150),
+                                                Text(
+                                                    "ml",
+                                                    font_family="Poppins",
+                                                    color=("#8c9092"),
+                                                    size=20,
+                                                ),
+                                            ),
+                                        ),
+                                    ),
+                                ],
+                                horizontal_alignment="center",
+                            ),
                         ),
                         alignment=ft.alignment.center,
                     ),
                     ft.Divider(height=40, color="transparent"),
                     ft.Container(
-                        content=ft.Image(
-                            src=f"Interface\Assets\Barril.png",
-                            width=200,
-                            fit=ft.ImageFit.CONTAIN,
+                        # alignment=ft.alignment.center,
+                        content=ft.Stack(
+                            [
+                                ft.Container(
+                                    width=264,
+                                    height=368,
+                                    alignment=ft.alignment.bottom_center,
+                                    content=ft.Container(
+                                        width=264,
+                                        height=200,
+                                        bgcolor=("#FFAF36"),
+                                    ),
+                                ),
+                                ft.Stack(
+                                    [
+                                        ft.Image(
+                                            src=f"Interface\Assets\Barril_Status.png",
+                                            width=265,
+                                            height=368.61,
+                                            fit=ft.ImageFit.CONTAIN,
+                                        ),
+                                        ft.Container(
+                                            width=264,
+                                            height=364,
+                                            padding=ft.padding.all(5),
+                                            alignment=ft.alignment.center,
+                                            content=ft.Text(
+                                                "5L", size=50, font_family="Poppins"
+                                            ),
+                                        ),
+                                    ]
+                                ),
+                            ]
                         ),
                         alignment=ft.alignment.center,
                     ),
