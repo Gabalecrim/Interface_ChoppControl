@@ -2,9 +2,20 @@ import flet as ft
 from flet import *
 from flet_route import *
 import threading
+import asyncio
+import Allan_utils as Allan_utils
+from Allan_utils import storage as st
+import time
+
+# Allan_utils.espUtils.startSerial('COM3', 115200, 1)
 
 
 def Home(page: ft.Page, params: Params, basket: Basket):
+    class valores:
+        vari = 10
+        @staticmethod
+        def getValue():
+            return valores.vari
     # ----------------------------------------------------------------
     # Navigation Bar
     class NavBar(UserControl):
@@ -34,6 +45,7 @@ def Home(page: ft.Page, params: Params, basket: Basket):
         def PageIcons(
             self,
             icon_name: str,
+            Color: str,
         ):
             return Container(
                 width=90,
@@ -46,7 +58,7 @@ def Home(page: ft.Page, params: Params, basket: Basket):
                             on_click=lambda _: self.page.go("/configs"),
                             icon=icon_name,
                             icon_size=70,
-                            icon_color=("#FFAF36"),
+                            icon_color=Color,
                             style=ButtonStyle(
                                 color={MaterialState.HOVERED: colors.GREEN},
                             ),
@@ -66,9 +78,9 @@ def Home(page: ft.Page, params: Params, basket: Basket):
                     controls=[
                         self.UserData("GA"),
                         Divider(height=100, color="transparent"),
-                        self.PageIcons(icons.DASHBOARD),
+                        self.PageIcons(icons.DASHBOARD, ("#FFAF36")),
                         Divider(height=50, color="transparent"),
-                        self.PageIcons(icons.SETTINGS),
+                        self.PageIcons(icons.SETTINGS, ("#ffffff")),
                     ],
                 ),
             )
@@ -139,6 +151,7 @@ def Home(page: ft.Page, params: Params, basket: Basket):
                                             controls=[
                                                 ft.IconButton(
                                                     icon=ft.icons.BUILD,
+                                                    icon_color=("#FFAF36"),
                                                     on_click=lambda _: self.page.go(
                                                         "/configs"
                                                     ),
@@ -188,10 +201,32 @@ def Home(page: ft.Page, params: Params, basket: Basket):
     # Header
     # ----------------------------------------------------------------
     # Status
+
     class Status(ft.UserControl):
 
         def build(self):
-            Barril = 0
+
+            class Setpoint(ft.Text):
+                def __init__(self, seconds):
+                    super().__init__()
+                    self.seconds = seconds
+
+                def did_mount(self):
+                    self.running = True
+                    self.page.run_task(self.update_timer)
+
+                def will_unmount(self):
+                    self.running = False
+
+                async def update_timer(self):
+                    while self.seconds and self.running:
+                        self.size = 25
+                        self.value = self.seconds
+                        self.update()
+                        await asyncio.sleep(.100)
+                        self.seconds += 1
+            Barril = True #place holder
+
             enchimento = 200
 
             def Start(e):
@@ -205,7 +240,7 @@ def Home(page: ft.Page, params: Params, basket: Basket):
                     SemBarril.open = True
                     page.update()
 
-                if Barril == 0:
+                if Barril == False:
                     SemBarril = ft.AlertDialog(
                         content=ft.Container(
                             alignment=ft.alignment.center,
@@ -251,17 +286,71 @@ def Home(page: ft.Page, params: Params, basket: Basket):
                         ),
                     )
                     OpenDialog(e)
-                else:
-                    pass
+                else: # ligar a maquina
+
+                    Allan_utils.espUtils.send("interface.volumeSetPoint=" + str(st.SetPoint_de_volume))
+                    Allan_utils.espUtils.send("interface.loadCellScale=" + str(st.Set_scale))
+                    Allan_utils.espUtils.send("interface.density=" + str(st.Densidade))
+                    Allan_utils.espUtils.send("interface.velMs=" + str(st.Velocidade_servo_ms))
+                    Allan_utils.espUtils.send("interface.velMsSlow=" + str(st.Velocidade_do_servo_fim_de_envase_ms))
+                    Allan_utils.espUtils.send("interface.fluxSetPoint=" + str(st.SetPoint_de_fluxo))
+                    Allan_utils.espUtils.send("interface.fluxSetPointLow=" + str(st.SetPoint_de_fluxo_baixo))
+                    Allan_utils.espUtils.send("interface.PID=" + str(st.Integral_PIGid))
+                    time.sleep(0.1)
+                    Allan_utils.espUtils.flushInput()
+
+
+                    print(Allan_utils.espUtils.sendReadValue("interface.PID"))
+                    
+                    Allan_utils.espUtils.send("interface.turnMachineOn()")
+                    time.sleep(0.1)
+                    Allan_utils.espUtils.flushInput()
+
+                    Allan_utils.espUtils.send("fazCoisas()")
+                    time.sleep(0.1)
+                    Allan_utils.espUtils.flushInput()
 
             return ft.Column(
                 controls=[
                     ft.Container(
                         content=ft.Container(
-                            height=100,
-                            width=200,
-                            border_radius=20,
-                            bgcolor=("#192226"),
+                            bgcolor="#192226",
+                            width=238,
+                            height=130,
+                            border_radius=10,
+                            content=Column(
+                                [
+                                    Container(
+                                        padding=padding.only(top=15),
+                                        content=Container(
+                                            alignment=ft.alignment.center,
+                                            content=Text(
+                                                "Set point 30L",
+                                                font_family="Poppins",
+                                                color=("#51BFF5"),
+                                                size=22,
+                                            ),
+                                        ),
+                                    ),
+                                    Container(
+                                        content=Row(
+                                            vertical_alignment=CrossAxisAlignment.END,
+                                            alignment=ft.MainAxisAlignment.CENTER,
+                                            spacing=20,
+                                            controls=(
+                                                Setpoint(1),
+                                                Text(
+                                                    "ml",
+                                                    font_family="Poppins",
+                                                    color=("#8c9092"),
+                                                    size=20,
+                                                ),
+                                            ),
+                                        ),
+                                    ),
+                                ],
+                                horizontal_alignment="center",
+                            ),
                         ),
                         alignment=ft.alignment.center,
                     ),
@@ -559,6 +648,7 @@ def Home(page: ft.Page, params: Params, basket: Basket):
     # ----------------------------------------------------------------
     return ft.View(
         "/",
+        scroll=ScrollMode.ALWAYS,
         bgcolor="#192026",
         controls=[
             ft.Container(

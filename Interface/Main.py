@@ -3,10 +3,12 @@ from flet_route import Routing, path
 from Views.Home import Home
 from Views.Login import Login
 from Views.Configs import Configs
+import threading
+import time
+import Allan_utils
 
 
 def main(page: ft.Page):
-    # page.window_center()
     page.window_bgcolor = "#192026"
     page.title = "Chopp Control"
     page.window_min_height = 700
@@ -28,5 +30,18 @@ def main(page: ft.Page):
     )
     page.go(page.route)
 
+
+def Setpoint():
+
+    while True:
+        time.sleep(0.1)
+        Speed = Allan_utils.espUtils.sendReadValue("interface.getSpeed()")
+        print(Speed)
+        return Speed
+
+
+t1 = threading.Thread(target=Setpoint)
+
+t1.start()
 
 ft.app(target=main)
